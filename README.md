@@ -44,17 +44,17 @@
 
 ## Contact Me :
 
-[![UdayKumarChunduru](https://telegra.ph/file/04f6ebab98de7c92050af.png)][GitHub.io]
+<p align="left"><b>Website:</b> https://udaykumar.me
+
 [![UdayKumarChunduru](https://img.icons8.com/fluent/48/000000/linkedin.png)][LinkedIn]
 [![◥VIKING么◤](https://img.icons8.com/fluent/48/000000/telegram-app.png)][Telegram]
 [![Uday Kumar](https://img.icons8.com/fluent/48/000000/instagram-new.png)][Instagram]
-[![Uday Kumar](https://img.icons8.com/fluent/48/000000/twitter.png)][Twitter]
-[![Uday Kumar](https://img.icons8.com/fluent/48/000000/facebook-new.png)][Facebook]
 
-[GitHub.io]: https://udaykumarchunduru.github.io
+
+
 [LinkedIn]: https://www.linkedin.com/in/udaykumarchunduru
 [Telegram]: https://telegram.dog/MortalViking
 [Instagram]: https://instagram.com/ur_m9
-[Twitter]: https://twitter.com/UdayChunduru
-[Facebook]: https://www.facebook.com/UdayOfficial.7
+
+
 
