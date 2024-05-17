@@ -5,9 +5,9 @@
 </p>
 
 ## About Me<img src="https://media.giphy.com/media/12oufCB0MyZ1Go/giphy.gif" width="50" height="36"> :
-- I am Engineering Student Studying Mechanical Engineering
-- Known of Some of Core Field Softwares AutoCAD , CATIA , SOLIDWORKS , SOLID EDGE , ANSYS , MATLAB
-- Currently Learning Non-Core and Interested Fields  Python, Web Development 
+- I’m currently working at Cognizant, with an experience of 1 year and 11 months.
+- I have hands-on experience with Python, SQL, Shell Scripting, JavaScript, HTML, CSS.
+- I completed my graduation in Mechanical Engineering in 2022.
 - Known Speakable Languages :
     - English
     - Telugu
