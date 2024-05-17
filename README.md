@@ -35,26 +35,13 @@
 
 <p><img align="center" src="https://github-readme-streak-stats.herokuapp.com/?user=UdayKumarChunduru&theme=highcontrast" alt="UdayKumarChunduru" /></p>
 
-[![Uday Kumar](https://github-readme-stats.vercel.app/api/wakatime?username=UdayKumarChunduru&theme=highcontrast)](https://github.com/UdayKumarChunduru)
-
-[![Sparkline](https://stars.medv.io/github.com/UdayKumarChunduru.svg)](https://stars.medv.io/github.com/UdayKumarChunduru)
-
 ## Servers and Hosts :
 <a href="https://heroku.com" target="_blank"> <img src="https://www.vectorlogo.zone/logos/heroku/heroku-icon.svg" alt="heroku" width="40" height="40"/> </a> <a href="https://www.linux.org/" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg" alt="linux" width="40" height="40"/> </a> </p>
 
 ## Contact Me :
 
-<p align="left"><b>Website:</b> https://udaykumar.me
+<p align="left"><b>Website:</b> https://udaykumarchunduru.github.io
 
 [![UdayKumarChunduru](https://img.icons8.com/fluent/48/000000/linkedin.png)][LinkedIn]
-[![◥VIKING么◤](https://img.icons8.com/fluent/48/000000/telegram-app.png)][Telegram]
-[![Uday Kumar](https://img.icons8.com/fluent/48/000000/instagram-new.png)][Instagram]
-
-
 
 [LinkedIn]: https://www.linkedin.com/in/udaykumarchunduru
-[Telegram]: https://telegram.dog/MortalViking
-[Instagram]: https://instagram.com/ur_m9
-
-
-
