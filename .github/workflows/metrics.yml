@@ -1,0 +1,190 @@
+# File:          .github/workflows/metrics.yml
+# Author:        Uday Kumar Chunduru
+# Created:       2026-05-27
+# Last Modified: 2026-05-27
+#
+# Description:
+#   GitHub Actions workflow that regenerates the contribution activity chart
+#   and GitHub metrics SVGs for the profile README. Runs every day at
+#   18:30 UTC which is exactly 12:00 AM IST (UTC+5:30). Also triggered on
+#   every push to main so the README reflects the latest commit immediately.
+#
+#   Before regenerating, the workflow checks the GitHub API for any commits
+#   across all repositories in the last 24 hours. If no new commits are
+#   found and the run was triggered by the cron schedule (not a push), it
+#   exits early to avoid an empty commit. Push-triggered runs always regenerate.
+#
+#   Generated files committed back to this repo:
+#     metrics/activity.svg        - Contribution activity chart (last 6 months)
+#     metrics/stats.svg           - Repository count, stars, commits, PRs, issues
+#     metrics/languages.svg       - Top languages used across repositories
+#
+# Usage:
+#   Triggered automatically. To run manually:
+#   Actions tab > Update Metrics > Run workflow
+#
+# Required secret:
+#   METRICS_TOKEN: a GitHub Personal Access Token with scopes:
+#     read:user, repo (for private repo activity), read:org (optional)
+#   Create at: Settings > Developer settings > Personal access tokens > Tokens (classic)
+#   Add to repo: Settings > Secrets and variables > Actions > New repository secret
+#
+# Notes:
+#   - Uses lowlighter/metrics@latest which generates SVG files via GitHub API
+#   - Generated SVGs are committed with [skip ci] to avoid infinite loop
+#   - If METRICS_TOKEN is not set the workflow fails gracefully with a message
+
+name: Update Metrics
+
+on:
+  schedule:
+    # 18:30 UTC = 00:00 IST (UTC+5:30) — runs every night at IST midnight
+    - cron: "30 18 * * *"
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  check-activity:
+    name: Check for recent commits
+    runs-on: ubuntu-latest
+    outputs:
+      has_activity: ${{ steps.check.outputs.has_activity }}
+
+    steps:
+      - name: Check GitHub activity in last 24 hours
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.METRICS_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          # On push events, always regenerate
+          if [[ "${{ github.event_name }}" == "push" || "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "has_activity=true" >> "$GITHUB_OUTPUT"
+            echo "Triggered by push or manual dispatch — regenerating metrics."
+            exit 0
+          fi
+
+          # On schedule, check if there were any commits in the last 24 hours
+          SINCE=$(date -u -d "24 hours ago" +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || \
+                  date -u -v-24H +%Y-%m-%dT%H:%M:%SZ)
+
+          EVENTS=$(curl -s \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/users/UdayKumarChunduru/events?per_page=30")
+
+          # Check for PushEvent in last 24 hours
+          RECENT=$(echo "$EVENTS" | python3 -c "
+          import json, sys
+          from datetime import datetime, timezone, timedelta
+
+          try:
+              events = json.load(sys.stdin)
+          except Exception:
+              print('false')
+              sys.exit(0)
+
+          cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
+          for e in events:
+              if e.get('type') == 'PushEvent':
+                  created = e.get('created_at', '')
+                  try:
+                      t = datetime.fromisoformat(created.replace('Z', '+00:00'))
+                      if t > cutoff:
+                          print('true')
+                          sys.exit(0)
+                  except Exception:
+                      pass
+          print('false')
+          ")
+
+          echo "has_activity=${RECENT}" >> "$GITHUB_OUTPUT"
+          if [[ "$RECENT" == "true" ]]; then
+            echo "New commits found in last 24 hours — regenerating metrics."
+          else
+            echo "No new commits in last 24 hours — skipping metrics regeneration."
+          fi
+
+  generate-metrics:
+    name: Generate and commit metrics SVGs
+    runs-on: ubuntu-latest
+    needs: check-activity
+    if: needs.check-activity.outputs.has_activity == 'true'
+
+    steps:
+      - name: Checkout profile repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.METRICS_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Create metrics directory
+        run: mkdir -p metrics
+
+      # ── Activity chart ─────────────────────────────────────────────────
+      - name: Generate activity metrics
+        uses: lowlighter/metrics@latest
+        with:
+          token:    ${{ secrets.METRICS_TOKEN }}
+          user:     UdayKumarChunduru
+          filename: metrics/activity.svg
+          base:     ""
+          plugin_activity:          yes
+          plugin_activity_limit:    10
+          plugin_activity_days:     180
+          plugin_activity_filter:   push, issue, pr, release
+          config_timezone:          Asia/Kolkata
+          config_padding:           6%
+          output_action:            none
+
+      # ── GitHub stats ───────────────────────────────────────────────────
+      - name: Generate stats metrics
+        uses: lowlighter/metrics@latest
+        with:
+          token:    ${{ secrets.METRICS_TOKEN }}
+          user:     UdayKumarChunduru
+          filename: metrics/stats.svg
+          base:     header, repositories, metadata
+          base_indepth:             yes
+          plugin_commits:           yes
+          plugin_commits_authoring: Uday Kumar Chunduru, udaykumarchunduru
+          config_timezone:          Asia/Kolkata
+          config_padding:           6%
+          output_action:            none
+
+      # ── Languages ──────────────────────────────────────────────────────
+      - name: Generate language metrics
+        uses: lowlighter/metrics@latest
+        with:
+          token:    ${{ secrets.METRICS_TOKEN }}
+          user:     UdayKumarChunduru
+          filename: metrics/languages.svg
+          base:     ""
+          plugin_languages:             yes
+          plugin_languages_ignored:     html, css, dockerfile, shell
+          plugin_languages_limit:       8
+          plugin_languages_analysis_timeout: 15
+          config_timezone:          Asia/Kolkata
+          config_padding:           6%
+          output_action:            none
+
+      # ── Commit all generated SVGs back ─────────────────────────────────
+      - name: Commit updated metrics
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add metrics/activity.svg metrics/stats.svg metrics/languages.svg
+
+          # Only commit if something actually changed
+          if git diff --cached --quiet; then
+            echo "No changes in generated metrics — nothing to commit."
+          else
+            TIMESTAMP=$(TZ="Asia/Kolkata" date "+%Y-%m-%d %H:%M IST")
+            git commit -m "chore: update metrics [${TIMESTAMP}] [skip ci]" \
+                       -m "Auto-generated by GitHub Actions workflow at IST midnight. Updated: activity chart, repository stats, language breakdown."
+            git push
+            echo "Metrics committed and pushed."
+          fi
