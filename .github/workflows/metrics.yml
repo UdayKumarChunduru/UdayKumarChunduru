@@ -124,6 +124,8 @@ jobs:
         run: mkdir -p metrics
 
       # ── Activity chart ─────────────────────────────────────────────────
+      # output_action: none  saves to /metrics_renders/ inside the container.
+      # A manual copy step after all three jobs moves files into the workspace.
       - name: Generate activity metrics
         uses: lowlighter/metrics@latest
         with:
@@ -170,7 +172,30 @@ jobs:
           config_padding:           6%
           output_action:            none
 
-      # ── Commit all generated SVGs back ─────────────────────────────────
+      # ── Copy SVGs from container render dir into workspace ─────────────
+      # lowlighter/metrics with output_action:none writes to /metrics_renders/
+      # not to $GITHUB_WORKSPACE. This step copies them into the repo directory
+      # so git can see and stage them.
+      - name: Copy generated SVGs into workspace
+        run: |
+          echo "Contents of /metrics_renders/:"
+          ls -la /metrics_renders/ || echo "(empty or not found)"
+          ls -la /metrics_renders/metrics/ 2>/dev/null || echo "(metrics subdir not found)"
+
+          # Copy each file — fail with a clear message if any is missing
+          for FILE in activity.svg stats.svg languages.svg; do
+            SRC="/metrics_renders/metrics/${FILE}"
+            DST="${GITHUB_WORKSPACE}/metrics/${FILE}"
+            if [[ -f "$SRC" ]]; then
+              cp "$SRC" "$DST"
+              echo "Copied: ${FILE}"
+            else
+              echo "ERROR: ${SRC} not found — metrics generation may have failed"
+              exit 1
+            fi
+          done
+
+      # ── Single commit for all three SVGs ──────────────────────────────
       - name: Commit updated metrics
         run: |
           git config user.name  "github-actions[bot]"
