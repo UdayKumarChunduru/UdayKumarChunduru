@@ -70,17 +70,17 @@ Stack: Jenkins · SonarQube · Trivy · OWASP · Snyk · Gitleaks · Docker · N
 ---
 
 ### Contribution activity
-<img src="metrics/activity.svg" alt="Contribution Activity" width="100%">
+<img src="metrics/activity.svg" alt="Contribution Activity" height="70%" width="70%">
 
 ---
 
 ### GitHub stats
-<img src="metrics/stats.svg" alt="GitHub Stats" width="100%">
+<img src="metrics/stats.svg" alt="GitHub Stats" height="70%" width="70%">
 
 ---
 
 ### Languages
-<img src="metrics/languages.svg" alt="Top Languages" width="100%">
+<img src="metrics/languages.svg" alt="Top Languages" height="70%" width="70%">
 
 ---
 
