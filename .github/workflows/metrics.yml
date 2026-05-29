@@ -101,8 +101,6 @@ jobs:
           plugin_activity_limit: 9
           plugin_activity_days: 3
           plugin_activity_filter: push, issue, pr, release, fork, star
-          config_theme: tokyonight
-          config_background: transparent
           config_animations: yes
           config_timezone: Asia/Kolkata
           config_padding: 4%, 4%
@@ -117,8 +115,6 @@ jobs:
           user: UdayKumarChunduru
           filename: metrics/stats.svg
           base: header, repositories, metadata
-          config_theme: tokyonight
-          config_background: transparent
           config_animations: yes
           config_timezone: Asia/Kolkata
           config_padding: 4%, 4%
@@ -137,8 +133,6 @@ jobs:
           # plugin_languages_ignored: html, css, dockerfile, shell
           # plugin_languages_limit: 8
           plugin_languages_analysis_timeout: 15
-          config_theme: tokyonight
-          config_background: transparent
           config_animations: yes
           config_timezone: Asia/Kolkata
           config_padding: 4%, 4%
