@@ -11,15 +11,13 @@
 #   - Before generating anything, checks GitHub API for PushEvents
 #     that happened TODAY in IST (not "last 24 hours" — today's date only)
 #   - If no commits today: exits cleanly, no commit, no noise
-#   - If commits found today: regenerates all three SVGs and commits
+#   - If commits found today: regenerates all two SVGs and commits
 #   - Push to this profile repo itself: always regenerates immediately
 #
-#   SVG COPY FIX (fixed from v1):
 #   - lowlighter/metrics with output_action:none saves SVGs to
 #     /metrics_renders/ inside Docker container, NOT $GITHUB_WORKSPACE
 #   - Added explicit copy step from /metrics_renders/metrics/ to workspace
 #
-#   ACTIVITY PLUGIN FIX (fixed from v1):
 #   - plugin_activity requires base to not skip header metadata
 #   - Fixed base setting for activity job
 #
@@ -87,25 +85,6 @@ jobs:
           echo "Has commits yesterday (IST): $HAS_COMMITS"
 
       # ── ONLY if commits were found yesterday ──
-      # ── Activity ──
-      - name: Generate activity metrics
-        if: steps.check.outputs.has_commits == 'true'
-        uses: lowlighter/metrics@latest
-        with:
-          token: ${{ secrets.METRICS_TOKEN }}
-          user: UdayKumarChunduru
-          filename: metrics/activity.svg
-          base: ""
-          plugin_activity: true
-          plugin_activity_visibility: all
-          plugin_activity_limit: 9
-          plugin_activity_days: 3
-          plugin_activity_filter: push, issue, pr, release, fork, star
-          config_animations: yes
-          config_timezone: Asia/Kolkata
-          config_padding: 4%, 4%
-          output_action: none
-
       # ── Stats ──
       - name: Generate stats metrics
         if: steps.check.outputs.has_commits == 'true'
@@ -143,7 +122,7 @@ jobs:
         if: steps.check.outputs.has_commits == 'true'
         run: |
           mkdir -p metrics
-          for f in activity.svg stats.svg languages.svg; do
+          for f in stats.svg languages.svg; do
             if [ -f /metrics_renders/metrics/$f ]; then
               cp /metrics_renders/metrics/$f metrics/$f
             else
@@ -155,7 +134,7 @@ jobs:
       - name: Commit and push updated SVGs
         if: steps.check.outputs.has_commits == 'true'
         run: |
-          git add metrics/activity.svg metrics/stats.svg metrics/languages.svg
+          git add metrics/stats.svg metrics/languages.svg
           if git diff --staged --quiet; then
             echo "No changes to metrics SVGs – nothing to commit"
           else
