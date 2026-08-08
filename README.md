@@ -1,10 +1,10 @@
 ## Uday Kumar Chunduru
 
-DevOps Engineer based in Hyderabad, India. I work on the infrastructure and automation side of software delivery — building CI/CD pipelines, containerising services onto Kubernetes, and provisioning cloud environments with Terraform so teams can deploy without manual steps.
+DevOps Engineer based in Hyderabad, India. I work on the infrastructure and automation side of software delivery: building CI/CD pipelines, containerising services onto Kubernetes, and provisioning cloud environments with Terraform so teams can deploy without manual steps.
 
 My background is 2.4 years of enterprise DevOps work on a large-scale Java microservice platform for a US telecom client, where the day-to-day involved GitHub Actions pipelines, Amazon EKS cluster management, Argo CD GitOps deployments, Terraform IaC, and SonarQube and Trivy as security gates in the delivery pipeline.
 
-Currently building personal projects in AI-powered Kubernetes tooling and DevSecOps platform engineering, and working toward AWS certification.
+Currently building personal projects across DevSecOps platform engineering, AWS-native CI/CD, AI-assisted cost optimization and Kubernetes troubleshooting, and working toward AWS certification.
 
 ---
 
@@ -35,7 +35,6 @@ Currently building personal projects in AI-powered Kubernetes tooling and DevSec
 **Monitoring and Observability**
 ![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=flat-square&logo=prometheus&logoColor=white)
 ![Grafana](https://img.shields.io/badge/Grafana-F46800?style=flat-square&logo=grafana&logoColor=white)
-![Elasticsearch](https://img.shields.io/badge/ELK_Stack-005571?style=flat-square&logo=elasticsearch&logoColor=white)
 
 **AI and Automation**
 ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
@@ -55,17 +54,31 @@ Currently building personal projects in AI-powered Kubernetes tooling and DevSec
 ---
 
 ### Projects
-**[AI Kubernetes Troubleshooting Agent](https://github.com/udaykumarchunduru/ai-kubernetes-troubleshooting-agent)**
-Full-stack platform that collects Kubernetes cluster diagnostics — pod logs, events, deployment status, network state — using kubectl and the Kubernetes API, then uses an LLM via Open Router API to generate root cause analysis with confidence scoring and suggested fix commands. React frontend with user authentication, real-time investigation progress, and investigation history stored in a database. Deployed using Docker Compose against a local kind cluster.
+**[Automated DevSecOps Security Gate for Kubernetes Deployments](https://github.com/udaykumarchunduru/devsecops-cicd-pipeline)**
+Jenkins pipeline enforcing a zero-Critical policy across Gitleaks, SonarQube, Snyk and Trivy application scans, extended to Terraform and Ansible infrastructure code with Checkov, tflint and ansible-lint. Provisions EKS, Secrets Manager and EFS with Terraform and Ansible, enforces Kyverno admission policies and Falco runtime detection with SNS-triggered Lambda pod remediation, and secures all access through IRSA and SSM Session Manager, zero static credentials, zero SSH.
 
-Stack: Python · FastAPI · React · Docker Compose · kind · kubectl · Kubernetes · Open Router API · LLM Integration · Bash
+Stack: Jenkins · SonarQube · Snyk · Trivy · Gitleaks · Checkov · tflint · ansible-lint · Docker · Kubernetes (EKS) · Kyverno · Falco · Terraform · Ansible · AWS (EC2, IAM/IRSA, Secrets Manager, EFS, CodeBuild, SNS, Lambda, SSM) · GitHub Actions
 
 ---
 
-**[Secure DevSecOps Platform for Kubernetes](https://github.com/udaykumarchunduru/secure-devops-platform)**
-End-to-end DevSecOps pipeline covering CI security, supply-chain scanning, Kubernetes runtime protection, policy enforcement, and full-stack observability. Jenkins pipeline integrates five security layers — Gitleaks, SonarQube, OWASP Dependency-Check, Snyk, and Trivy — enforcing a zero-Critical policy before images reach Nexus. Falco monitors running containers for runtime threats. Kyverno blocks non-compliant pods at admission. AWS Lambda handles automated pod isolation on CRITICAL alerts via SNS.
+**[AI-Assisted Kubernetes Troubleshooter](https://github.com/udaykumarchunduru/k8s-ai-troubleshooter)**
+JWT-authenticated FastAPI agent that collects pod logs, events and deployment status through the Kubernetes API, detects 14 failure patterns including CrashLoopBackOff, OOMKilled and ImagePullBackOff, and generates root cause analysis with kubectl fix commands through a pluggable OpenRouter, Ollama and Bedrock LLM backend. Packaged as a Helm chart with least-privilege read-only RBAC, HPA and PDB, a Redis-backed job queue, and Prometheus and Grafana dashboards tracking investigation and LLM metrics.
 
-Stack: Jenkins · SonarQube · Trivy · OWASP · Snyk · Gitleaks · Docker · Nexus · Kubernetes · Falco · Kyverno · Prometheus · Grafana · ELK Stack · AWS Lambda · SNS
+Stack: Python · FastAPI · Kubernetes · Helm · Docker · Redis · Prometheus · Grafana · OpenRouter API · Ollama · AWS Bedrock · GitHub Actions
+
+---
+
+**[AI-Powered AWS Cost Optimizer](https://github.com/udaykumarchunduru/aws-cost-optimizer-ai)**
+Plugin-based cost optimizer using boto3 and a thread pool to run 10 auto-discovered scanners in parallel across Cost Explorer-identified regions, flagging idle EC2, RDS, EBS, NAT Gateway and Secrets Manager waste. Generates AI remediation guidance via Bedrock and Ollama, automates nightly idle-shutdown and weekly SES cost-report Lambdas on EventBridge schedules, and caches AWS Pricing API lookups to avoid throttling across parallel regional scans.
+
+Stack: Python · FastAPI · boto3 · Terraform · AWS Lambda · Bedrock · DynamoDB · CloudWatch · SES · EventBridge · GitHub Actions · Docker · Ollama
+
+---
+
+**[End-to-End CI/CD Pipeline for Flask Application on AWS Code Services](https://github.com/udaykumarchunduru/aws-codepipeline-terraform)**
+Flask app deployed to an Auto Scaling Group behind a WAF-protected, HTTPS Application Load Balancer using CodePipeline, CodeBuild and CodeDeploy, with CloudWatch alarms triggering automatic rollback on failed traffic-controlled rollouts. Terraform changes ship through GitHub Actions using OIDC federation with zero stored AWS credentials, gating pull requests on fmt, validate and Checkov scans ahead of an approval-gated production apply.
+
+Stack: AWS CodePipeline · CodeBuild · CodeDeploy · Auto Scaling · Application Load Balancer · WAF · IAM (OIDC) · S3 · DynamoDB · CloudWatch · SNS · Terraform · GitHub Actions · Checkov
 
 ---
 
