@@ -94,4 +94,7 @@ Stack: AWS CodePipeline · CodeBuild · CodeDeploy · Auto Scaling · Applicatio
 
 ### Connect
 
-[LinkedIn](https://www.linkedin.com/in/udaykumarchunduru) &nbsp;·&nbsp; [GitHub](https://github.com/udaykumarchunduru) &nbsp;·&nbsp; [Telegram](https://t.me/fortecipher)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/udaykumarchunduru)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/udaykumarchunduru)
+[![Portfolio](https://img.shields.io/badge/Portfolio-8B5CF6?style=flat-square&logo=googlechrome&logoColor=white)](https://udaykumarchunduru.pages.dev)
+[![Telegram](https://img.shields.io/badge/Telegram-26A5E4?style=flat-square&logo=telegram&logoColor=white)](https://t.me/fortecipher)
